@@ -2,10 +2,13 @@ const {
   fetchProducts,
   fetchOrders,
   fetchLineItems,
+  fetchReviews,
   createLineItem,
   updateLineItem,
   deleteLineItem,
-  updateOrder
+  updateOrder,
+  createProduct,
+  createReview,
 } = require('./db');
 
 const express = require('express');
@@ -47,6 +50,14 @@ app.get('/lineItems', async(req, res, next)=> {
   }
 });
 
+app.get('/reviews', async(req, res, next)=> {
+  try {
+    res.send(await fetchReviews());
+  } catch (ex) {
+    next(ex);
+  }
+})
+
 app.post('/lineItems', async(req, res, next)=> {
   try {
     res.send(await createLineItem(req.body));
@@ -71,6 +82,14 @@ app.delete('/lineItems/:id', async(req, res, next)=> {
     res.sendStatus(204);
   }
   catch(ex){
+    next(ex);
+  }
+});
+
+app.post('/products', async(req, res, next)=> {
+  try {
+    res.send(await createProduct(req.body));
+  } catch (ex) {
     next(ex);
   }
 });

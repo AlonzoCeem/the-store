@@ -5,16 +5,26 @@ import { Link, HashRouter, Routes, Route } from 'react-router-dom';
 import Products from './Products';
 import Orders from './Orders';
 import Cart from './Cart';
+import Reviews from './Reviews'
 
 const App = ()=> {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [lineItems, setLineItems] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(()=> {
     const fetchData = async()=> {
-      const response = await axios.get('/api/products');
-      setProducts(response.data);
+      const {data} = await axios.get('/api/products');
+      const sortedNames = data.map(product => product.name).sort()
+      const sortedProducts = sortedNames.map(name => {
+        return data.find(product => {
+          if(product.name === name){
+            return product
+          }
+        })
+      })
+      setProducts(sortedProducts)
     };
     fetchData();
   }, []);
@@ -35,6 +45,14 @@ const App = ()=> {
     fetchData();
   }, []);
 
+  useEffect(()=> {
+    const fetchData = async()=> {
+      const response = await axios.get('/api/reviews');
+      setReviews(response.data);
+    };
+    fetchData();
+  }, []);
+
   const cart = orders.find(order => order.is_cart);
   if(!cart){
     return null;
@@ -48,9 +66,17 @@ const App = ()=> {
     setLineItems([...lineItems, response.data]);
   };
 
-  const updateLineItem = async(lineItem)=> {
+  const addLineItem = async(lineItem)=> {
     const response = await axios.put(`/api/lineItems/${lineItem.id}`, {
       quantity: lineItem.quantity + 1,
+      order_id: cart.id
+    });
+    setLineItems(lineItems.map( lineItem => lineItem.id == response.data.id ? response.data: lineItem));
+  };
+
+  const subtractLineItem = async(lineItem)=> {
+    const response = await axios.put(`/api/lineItems/${lineItem.id}`, {
+      quantity: lineItem.quantity - 1,
       order_id: cart.id
     });
     setLineItems(lineItems.map( lineItem => lineItem.id == response.data.id ? response.data: lineItem));
@@ -76,30 +102,27 @@ const App = ()=> {
   return (
     <div>
       <nav>
-        <Link to='/products'>Products ({ products.length })</Link>
-        <Link to='/orders'>Orders ({ orders.filter(order => !order.is_cart).length })</Link>
-        <Link to='/cart'>Cart ({ cartCount })</Link>
+        <Link to='/'>Show All</Link> |
+        <Link to='/products'>Products ({ products.length })</Link> |
+        <Link to='/orders'>Orders ({ orders.filter(order => !order.is_cart).length })</Link> |
+        <Link to='/cart'>Cart ({ cartCount })</Link> |
+        <Link to='/reviews'>Reviews ({reviews.length})</Link>
       </nav>
-      <main>
-        <Products
-          products={ products }
-          cartItems = { cartItems }
-          createLineItem = { createLineItem }
-          updateLineItem = { updateLineItem }
-        />
-        <Orders
-          orders = { orders }
-          products = { products }
-          lineItems = { lineItems }
-        />
-        <Cart
-          cart = { cart }
-          lineItems = { lineItems }
-          products = { products }
-          updateOrder = { updateOrder }
-          removeFromCart = { removeFromCart }
-        />
-      </main>
+
+      <Routes>
+        <Route path="/" element={
+          <main>
+            <Products products={ products } cartItems = { cartItems } createLineItem = { createLineItem } addLineItem = { addLineItem } setProducts= { setProducts } />
+            <Orders orders = { orders } products = { products } lineItems = { lineItems } />
+            <Cart cart = { cart } lineItems = { lineItems } products = { products } updateOrder = { updateOrder } removeFromCart = { removeFromCart } addLineItem = { addLineItem } subtractLineItem = { subtractLineItem }/>
+            <Reviews reviews = { reviews } products={ products }/>
+          </main>
+        }/>
+        <Route path="/products" element={<Products products={ products } cartItems = { cartItems } createLineItem = { createLineItem } addLineItem = { addLineItem } setProducts= { setProducts }/>}/>
+        <Route path="/orders" element={<Orders orders = { orders } products = { products } lineItems = { lineItems } />}/>
+        <Route path="/cart" element={<Cart cart = { cart } lineItems = { lineItems } products = { products } updateOrder = { updateOrder } removeFromCart = { removeFromCart } addLineItem = { addLineItem } subtractLineItem = { subtractLineItem } />}/>
+        <Route path="/reviews" element={<Reviews reviews = { reviews } products={ products }/>}/>
+      </Routes>
     </div>
   );
 };
