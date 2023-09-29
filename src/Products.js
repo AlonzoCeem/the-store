@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 const Products = ({ products, cartItems, createLineItem, addLineItem, setProducts })=> {
   const [newProdName, setNewProdName] = useState("");
-  const [newProdPrice, setNewProdPrice] = useState(0);
+  const [newProdPrice, setNewProdPrice] = useState("");
   const [newProdDesc, setNewProdDesc] = useState("");
 
   const createProduct = async(ev)=> {
@@ -20,19 +21,23 @@ const Products = ({ products, cartItems, createLineItem, addLineItem, setProduct
   return (
     <div>
       <h2>Products</h2>
+      <hr/>
+      <h4>Create a product</h4>
       <form onSubmit={createProduct}>
-        <input type="text" placeholder="Product name" value={newProdName} onChange={ev => setNewProdName(ev.target.value)}/>
-        <input type="number" placeholder="Product price" value={newProdPrice} onChange={ev => setNewProdPrice(ev.target.value)}/>
-        <input type="text" placeholder="Product description" value={newProdDesc} onChange={ev => setNewProdDesc(ev.target.value)}/>
+        <input type="text" placeholder="Product name" value={newProdName} onChange={ev => setNewProdName(ev.target.value)}/><br/>
+        <input type="number" placeholder="Product price" value={newProdPrice} onChange={ev => setNewProdPrice(ev.target.value)}/><br/>
+        <input type="text" placeholder="Product description" value={newProdDesc} onChange={ev => setNewProdDesc(ev.target.value)}/><br/>
         <button>Create product</button>
       </form>
+      <hr/>
       <ul>
         {
           products.map( product => {
             const cartItem = cartItems.find(lineItem => lineItem.product_id === product.id);
             return (
               <li key={ product.id }>
-                { `Name: ${product.name} Price: ${product.price ? `$${(product.price/100).toFixed(2)}` : "free"}` }
+                <Link to={`/products/${product.id}`}>{`Name: ${product.name}`}</Link>
+                {` Price: ${product.price ? `$${(product.price/100).toFixed(2)}` : "free"}` }
                 <br/>
                 {`Description: ${product.description ? product.description.substr(0, 101) : "No description provided!"}`}
                 <br/>
@@ -44,6 +49,7 @@ const Products = ({ products, cartItems, createLineItem, addLineItem, setProduct
           })
         }
       </ul>
+      <hr/>
     </div>
   );
 };

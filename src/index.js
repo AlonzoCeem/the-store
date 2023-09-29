@@ -6,6 +6,7 @@ import Products from './Products';
 import Orders from './Orders';
 import Cart from './Cart';
 import Reviews from './Reviews'
+import Product from './Product';
 
 const App = ()=> {
   const [products, setProducts] = useState([]);
@@ -113,15 +114,16 @@ const App = ()=> {
         <Route path="/" element={
           <main>
             <Products products={ products } cartItems = { cartItems } createLineItem = { createLineItem } addLineItem = { addLineItem } setProducts= { setProducts } />
-            <Orders orders = { orders } products = { products } lineItems = { lineItems } />
             <Cart cart = { cart } lineItems = { lineItems } products = { products } updateOrder = { updateOrder } removeFromCart = { removeFromCart } addLineItem = { addLineItem } subtractLineItem = { subtractLineItem }/>
+            <Orders orders = { orders } products = { products } lineItems = { lineItems } />
             <Reviews reviews = { reviews } products={ products }/>
           </main>
         }/>
         <Route path="/products" element={<Products products={ products } cartItems = { cartItems } createLineItem = { createLineItem } addLineItem = { addLineItem } setProducts= { setProducts }/>}/>
-        <Route path="/orders" element={<Orders orders = { orders } products = { products } lineItems = { lineItems } />}/>
         <Route path="/cart" element={<Cart cart = { cart } lineItems = { lineItems } products = { products } updateOrder = { updateOrder } removeFromCart = { removeFromCart } addLineItem = { addLineItem } subtractLineItem = { subtractLineItem } />}/>
+        <Route path="/orders" element={<Orders orders = { orders } products = { products } lineItems = { lineItems } />}/>
         <Route path="/reviews" element={<Reviews reviews = { reviews } products={ products }/>}/>
+        <Route path="/products/:id" element={<Product products={ products } reviews={ reviews }/>}/>
       </Routes>
     </div>
   );

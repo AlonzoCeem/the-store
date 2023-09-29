@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Orders = ({ orders, products, lineItems })=> {
   return (
@@ -20,13 +21,15 @@ const Orders = ({ orders, products, lineItems })=> {
                       orderPrice += totalPrice;
                       return (
                         <li key={ lineItem.id }>
-                          { product ? `${product.name}(${lineItem.quantity}) for $${(totalPrice/100).toFixed(2)}!`: '' }
+                          <Link to={`/products/${product.id}`}>{`${product.name}`}</Link>
+                          { product ? `(${lineItem.quantity}) for $${(totalPrice/100).toFixed(2)}!` : '' }
                         </li>
                       );
                     })
                   }
                 </ul>
-                {`For a total of: $${(orderPrice/100).toFixed(2)}!`}
+                <strong><p>{`For a total of: $${(orderPrice/100).toFixed(2)}!`}</p></strong>
+                <hr/>
               </li>
             );
           })

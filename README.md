@@ -20,11 +20,11 @@
 - [X] A reviews section should be added. Each review will belong to a product. A review should have a column called txt which take a max of 255 characters. It should also have a rating column which is an INTEGER. Ratings should be from 1 to 5. (seed data for reviews)
 - [X] The reviews in review section should be grouped by product.
 - [X] A user should be able to increment and decrement the number of items in their carts.
-- [ ] The site should allow users to display each section separately.
+- [X] The site should allow users to display each section separately.
   - [X] /products should show products
   - [X] /cart should show the cart
   - [X] /orders should show the orders
   - [X] /reviews should show the reviews 
-  - [ ] /products/:id should show the full products description and the reviews for that product
+  - [X] /products/:id should show the full products description and the reviews for that product
 - [ ] Display the most popular product based on the number of times it has been sold.
 - [ ] Deploy
