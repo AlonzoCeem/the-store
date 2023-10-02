@@ -18,7 +18,6 @@ const Products = ({ products, cartItems, createLineItem, addLineItem, setProduct
     setProducts([...products, data]);
   };
 
-  console.log(lineItems)
   const dict = lineItems.reduce((acc, item)=> {
     acc[item.product_id] = acc[item.product_id] || 0;
     acc[item.product_id] += item.quantity;
