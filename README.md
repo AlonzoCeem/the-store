@@ -26,5 +26,5 @@
   - [X] /orders should show the orders
   - [X] /reviews should show the reviews 
   - [X] /products/:id should show the full products description and the reviews for that product
-- [ ] Display the most popular product based on the number of times it has been sold.
+- [X] Display the most popular product based on the number of times it has been sold.
 - [ ] Deploy

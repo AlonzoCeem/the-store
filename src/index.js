@@ -113,13 +113,13 @@ const App = ()=> {
       <Routes>
         <Route path="/" element={
           <main>
-            <Products products={ products } cartItems = { cartItems } createLineItem = { createLineItem } addLineItem = { addLineItem } setProducts= { setProducts } />
+            <Products products={ products } cartItems = { cartItems } createLineItem = { createLineItem } addLineItem = { addLineItem } setProducts= { setProducts } lineItems={lineItems}/>
             <Cart cart = { cart } lineItems = { lineItems } products = { products } updateOrder = { updateOrder } removeFromCart = { removeFromCart } addLineItem = { addLineItem } subtractLineItem = { subtractLineItem }/>
             <Orders orders = { orders } products = { products } lineItems = { lineItems } />
             <Reviews reviews = { reviews } products={ products }/>
           </main>
         }/>
-        <Route path="/products" element={<Products products={ products } cartItems = { cartItems } createLineItem = { createLineItem } addLineItem = { addLineItem } setProducts= { setProducts }/>}/>
+        <Route path="/products" element={<Products products={ products } cartItems = { cartItems } createLineItem = { createLineItem } addLineItem = { addLineItem } setProducts= { setProducts } lineItems={lineItems}/>}/>
         <Route path="/cart" element={<Cart cart = { cart } lineItems = { lineItems } products = { products } updateOrder = { updateOrder } removeFromCart = { removeFromCart } addLineItem = { addLineItem } subtractLineItem = { subtractLineItem } />}/>
         <Route path="/orders" element={<Orders orders = { orders } products = { products } lineItems = { lineItems } />}/>
         <Route path="/reviews" element={<Reviews reviews = { reviews } products={ products }/>}/>

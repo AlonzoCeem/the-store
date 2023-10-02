@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
-const Products = ({ products, cartItems, createLineItem, addLineItem, setProducts })=> {
+const Products = ({ products, cartItems, createLineItem, addLineItem, setProducts, lineItems })=> {
   const [newProdName, setNewProdName] = useState("");
   const [newProdPrice, setNewProdPrice] = useState("");
   const [newProdDesc, setNewProdDesc] = useState("");
@@ -15,12 +15,32 @@ const Products = ({ products, cartItems, createLineItem, addLineItem, setProduct
       description: newProdDesc
     };
     const { data } = await axios.post('/api/products', product);
-    setProducts([...products, data])
-  }
+    setProducts([...products, data]);
+  };
+
+  console.log(lineItems)
+  const dict = lineItems.reduce((acc, item)=> {
+    acc[item.product_id] = acc[item.product_id] || 0;
+    acc[item.product_id] += item.quantity;
+    return acc;
+  }, {});
+  const max = Math.max(...Object.values(dict));
+  const entries = Object.entries(dict);
+  const popularIds = entries.filter(entry => entry[1] === max).map(entry => entry[0])
+  const popular = products.filter(product => popularIds.includes(product.id))
 
   return (
     <div>
       <h2>Products</h2>
+      <h4>Our most popular product(s): 
+        {
+          popular.map(product => {
+            return (
+            <strong key={product.id}> {product.name} </strong>
+            )
+          })
+        }
+      </h4>
       <hr/>
       <h4>Create a product</h4>
       <form onSubmit={createProduct}>
